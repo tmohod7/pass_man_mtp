@@ -258,12 +258,28 @@ function listeningForClicks() {
   	}
   	
     /**
+     * Copy the password generated from the active Tab and save it in the clipboard.
+     */
+
+ 	function copybtn(tabs) {
+ 		var outputIs = document.getElementById('myOutput').value;
+ 		if(outputIs != "Your password will be displayed here.") {
+ 			var range = document.createRange();
+		    range.selectNode(document.getElementById('myOutput'));
+		    window.getSelection().removeAllRanges();
+		    window.getSelection().addRange(range);
+		    document.execCommand("copy");
+		    window.getSelection().removeAllRanges();
+ 		}
+    }
+  	
+    /**
      * Removes the entered hint value from the input box in the active Tab.
      */
 
   	function reset(tabs) {
   		document.getElementById('hint_value').value = '';
-		document.getElementById('myOutput').innerHTML = "Your password will display here.";
+		document.getElementById('myOutput').innerHTML = "Your password will be displayed here.";
   	}
 
     /**
@@ -288,6 +304,11 @@ function listeningForClicks() {
 			.then(reset)
 			.catch(reportError);
     }
+    else if (e.target.classList.contains("copybtn")) {
+		browser.tabs.query({active: true, currentWindow: true})
+			.then(copybtn)
+			.catch(reportError);
+    }
   });
 }
 
@@ -296,3 +317,5 @@ function listeningForClicks() {
  */
  
 listeningForClicks();
+
+
